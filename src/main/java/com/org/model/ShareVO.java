@@ -4,6 +4,7 @@ import java.util.Date;
  
 public class ShareVO 
 {
+	// add comment for git
 	public ShareVO(String companyName, float bonusRatio, String announcementDate, String exBonusDate) {
 		super();
 		this.companyName = companyName;
