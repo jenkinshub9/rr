@@ -6,7 +6,7 @@ import java.util.List;
 import com.org.model.ShareVO;
 
 public class ShareDAOImpl implements ShareDAO {
-
+//update form test2 lient
 	public List<ShareVO> getAllPlayers() {
 
 		List<ShareVO>  listOfShare= new ArrayList<ShareVO>();
