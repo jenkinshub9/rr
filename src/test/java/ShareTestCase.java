@@ -8,7 +8,7 @@ import org.junit.Test;
 import com.org.model.ShareVO;
 import com.org.service.ShareService;
 import com.org.service.ShareServiceImpl;
-
+// comment for testcase
 public class ShareTestCase {
 
 	@Test
