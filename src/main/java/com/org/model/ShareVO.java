@@ -3,7 +3,7 @@ package com.org.model;
 import java.util.Date;
  
 public class ShareVO 
-{
+{        // add new data 12 feb
 	// add comment for git
 	public ShareVO(String companyName, float bonusRatio, String announcementDate, String exBonusDate) {
 		super();
