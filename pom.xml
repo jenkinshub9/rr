@@ -1,4 +1,4 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+ <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.org</groupId>
@@ -8,7 +8,17 @@
   <name>cicdProject</name>
   <url>http://maven.apache.org</url>
   
-  
+ 
+ 
+<reporting>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-report-plugin</artifactId>
+        <version>2.22.0</version>
+      </plugin>
+    </plugins>
+  </reporting>
   <dependencies>
 <dependency>
   <groupId>org.apache.maven.plugins</groupId>
@@ -35,36 +45,33 @@
     <finalName>cicdProject</finalName>
     
     <plugins>
-	<plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-site-plugin</artifactId>
-                <version>2.3</version>
-            </plugin>
-
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-project-info-reports-plugin</artifactId>
-                <version>3.0.0</version>
-            </plugin>
-    <plugin>
-    <groupId>org.apache.tomcat.maven</groupId>
+      <plugin>
+     <groupId>org.apache.tomcat.maven</groupId>
     <artifactId>tomcat7-maven-plugin</artifactId>
     <version>2.2</version>
     <configuration>
         <url>http://localhost:8080/manager/text</url>
         <server>Tomcat</server>
-        <port>8181</port>
+        <port>9091</port>
        
         <path>/cicdProject</path>
         
     </configuration>
 </plugin>
- 
+ <plugin>
+  <groupId>org.apache.maven.plugins</groupId>
+  <artifactId>maven-site-plugin</artifactId>
+  <version>3.7.1</version>
+</plugin>
+<plugin>
+  <groupId>org.apache.maven.plugins</groupId>
+  <artifactId>maven-project-info-reports-plugin</artifactId>
+  <version>3.0.0</version>
+</plugin>
 <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-javadoc-plugin</artifactId>
-			<version>3.1.0</version>
-			    <executions>
+            <executions>
                 <execution>
                     <id>attach-javadocs</id>
                     <goals>
@@ -73,18 +80,12 @@
                 </execution>
             </executions>
         </plugin>
- <plugin>
-			<groupId>org.apache.maven.plugins</groupId>
-			<artifactId>maven-surefire-report-plugin</artifactId>
-			<version>2.22.0</version>
-		</plugin>
+ 
  
   <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-source-plugin</artifactId>
-		    <version>2.2.1</version>
-
-		         <executions>
+        <executions>
             <execution>
                 <id>attach-sources</id>
                 <goals>
@@ -97,15 +98,16 @@
     </plugins>
    
   
-    <resources>
+  <resources>
+    
         <resource>
             <directory>src/main/resources</directory>
             <filtering>true</filtering>
         </resource>
     </resources>
    
-   
-   
 </build>
+ <distributionManagement>
  
+</distributionManagement>
 </project>
