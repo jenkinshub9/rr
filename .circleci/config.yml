@@ -1,9 +1,23 @@
-version: 2.1
+ version: 2
+jobs:
+  build:
+    working_directory: ~/rr
+    docker:
+      - image: maven:3.5.0-jdk-9
 
-orbs:
-  maven: circleci/maven@0.0.12
+    steps:
+      - checkout
 
-workflows:
-  maven_test:
-    jobs:
-      - maven/test # checkout, build, test, and upload test results
+      - restore_cache:
+          key: rr-{{ checksum "pom.xml" }}
+
+      - run: mvn test
+
+      - save_cache:
+          paths:
+            - ~/.m2
+          key: rr-{{ checksum "pom.xml" }}
+
+      - store_test_results:
+          path: target/surefire-reports
+© 2020 GitHub, Inc.
