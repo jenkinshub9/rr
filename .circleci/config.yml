@@ -1,4 +1,4 @@
- version: 2
+version: 2
 jobs:
   build:
     working_directory: ~/rr
@@ -19,5 +19,4 @@ jobs:
           key: rr-{{ checksum "pom.xml" }}
 
       - store_test_results:
-          path: target/surefire-reports
-© 2020 GitHub, Inc.
+          path: target/surefire-report
