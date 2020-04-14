@@ -1,0 +1,23 @@
+version: 2
+jobs:
+  build:
+    working_directory: ~/rr
+    docker:
+      - image: maven:3.5.0-jdk-9
+
+    steps:
+      - checkout
+
+      - restore_cache:
+          key: rr-{{ checksum "pom.xml" }}
+
+      - run: mvn test
+
+      - save_cache:
+          paths:
+            - ~/.m2
+          key: rr-{{ checksum "pom.xml" }}
+
+      - store_test_results:
+          path: target/surefire-reports
+© 2020 GitHub, Inc.
