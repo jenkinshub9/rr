@@ -29,5 +29,5 @@
         
       # run tests!
       - run: mvn site
-      - run: package 
-      - run: surefire:test test 
+      - run: mvn package 
+      - run: mvn surefire:test test 
