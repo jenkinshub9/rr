@@ -28,4 +28,6 @@
           key: v1-dependencies-{{ checksum "pom.xml" }}
         
       # run tests!
-      - run: mvn site package surefire:test 
+      - run: mvn site
+      - run: package 
+      -run: surefire:test test 
