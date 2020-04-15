@@ -1,22 +1,13 @@
-version: 2
-jobs:
-  build:
-    working_directory: ~/rr
-    docker:
-      - image: maven:3.5.0-jdk-9
+ dependencies:
+  override:
+    - mvn -DskipTests clean install dependency:resolve-plugins dependency:go-offline
 
-    steps:
-      - checkout
+test:
+  override:
+    - mvn -o surefire:test
 
-      - restore_cache:
-          key: rr-{{ checksum "pom.xml" }}
-
-      - run: mvn test
-
-      - save_cache:
-          paths:
-            - ~/.m2
-          key: rr-{{ checksum "pom.xml" }}
-
-      - store_test_results:
-          path: target/surefire-report
+deployment:
+  main:
+    branch: master
+    commands:
+      - mvn -s .circleci.settings.xml -DskipTests deploy
