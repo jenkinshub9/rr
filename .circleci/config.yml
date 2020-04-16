@@ -1,33 +1,70 @@
- jobs:
-  build:
-    docker:
-      # specify the version you desire here
-      - image: circleci/openjdk:8-jdk
-      
-      # Specify service dependencies here if necessary
-      # CircleCI maintains a library of pre-built images
-      # documented at https://circleci.com/docs/2.0/circleci-images/
-      # - image: circleci/postgres:9.4
-    working_directory: ~/repo
-    environment:
-      # Customize the JVM maximum heap limit
-      MAVEN_OPTS: -Xmx3200m
-    
-    steps:
-      - checkout
-      # Download and cache dependencies
-      - restore_cache:
-          keys:
-          - v1-dependencies-{{ checksum "pom.xml" }}
-          # fallback to using the latest cache if no exact match is found
-          - v1-dependencies-
-      - run: mvn dependency:go-offline
-      - save_cache:
-          paths:
-            - ~/.m2
-          key: v1-dependencies-{{ checksum "pom.xml" }}
-        
-      # run tests!
-      - run: mvn site
-      - run: mvn package 
-      - run: mvn surefire:test test 
+version: 2
+jobs:
+        unit_test:
+                docker:
+                - image: circleci/openjdk:8-jdk           
+                - image: busybox:latest
+                steps:
+                - run:
+
+                        name: Unit Test
+                        command: echo "Going to run Unit Test"
+                        mvn surefire:test test       
+        sitetest:
+                docker:
+                - image: circleci/openjdk:8-jdk
+                - image: busybox:latest
+                steps:
+                - run:
+                        name: sit Test
+                        command: echo "Going to run site Test"
+                         mvn site 
+        build_artifact:
+                docker:
+                - image: circleci/openjdk:8-jdk 
+                - image: busybox:latest
+                steps:
+                - run:
+                        name: Build Artifact
+                        command: echo "Going to run the build artifact"
+                        mvn package
+
+        deploy_to_dev:
+                docker:
+                - image: circleci/openjdk:8-jdk
+                - image: busybox:latest
+                steps:
+                - run:
+                        name: Deploy to Dev
+                        command: echo "Going to deploy to dev"
+        deploy_to_qa:
+                docker:
+                 - image: circleci/openjdk:8-jdk
+                 - image: busybox:latest
+                steps:
+                - run:
+                        name: Deploy to QA
+                        command: echo "Going to deploy to QA"
+                - run:
+                        name: Step no 2
+                        command: echo "Going to deploy to QA again"
+workflows:
+        version: 2
+        sample_pipeline:
+                jobs:
+                        - sitetest
+                        - unit_test
+                        - build_artifact:
+                                requires:
+                                - unit_test
+                                - sitetest
+                        - deploy_to_dev:
+                                requires:
+                                - build_artifact
+                        - hold_for_approval:
+                                type: approval
+                                requires:
+                                - deploy_to_dev
+                        - deploy_to_qa:
+                                requires:
+                                - hold_for_approval 
