@@ -21,6 +21,8 @@
           - v1-dependencies-{{ checksum "pom.xml" }}
           # fallback to using the latest cache if no exact match is found
           - v1-dependencies-
+          test:
+          steps:
       - run: mvn dependency:go-offline
       - save_cache:
           paths:
@@ -29,5 +31,17 @@
         
       # run tests!
       - run: mvn site
-      - run: mvn package 
+      - run: mvn package
+      report:
+      steps:
       - run: mvn surefire:test test 
+      - store_artifacts:
+          path:  target
+
+workflows:
+  version: 2
+  build_test_report:
+    jobs:
+      - build
+      - test
+      - report
