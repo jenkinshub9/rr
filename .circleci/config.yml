@@ -1,6 +1,5 @@
-# ~/.circleci/config.yml
-version: 2.1
- jobs:
+version: 2
+jobs:
   test-maven:
     working_directory: ~/rr
     docker:
@@ -87,9 +86,9 @@ deploy-maven:
 
           path: target/site
 # work flow
-
 workflows:
-   verson : 2.1
+        version: 2
+        sample_pipeline:
      workflow:
         jobs:
           - test-maven
