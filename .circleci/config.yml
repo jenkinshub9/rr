@@ -1,102 +1,56 @@
 version: 2
 jobs:
-  test-maven:
-    working_directory: ~/rr
-    docker:
-      - image: maven:3.5.0-jdk-9
-
-    steps:
-      - checkout
-
-      - restore_cache:
-          key: rr-{{ checksum "pom.xml" }}
-
-      - run: mvn test
-
-      - save_cache:
-          paths:
-            - ~/.m2
-          key: rr-{{ checksum "pom.xml" }}
-
-      - store_test_results:
-          path: target/surefire-reports
-
-#-----------------------------------------------------------------
-build-maven:
-    working_directory: ~/rr
-    docker:
-      - image: maven:3.5.0-jdk-9
-
-    steps:
-      - checkout
-
-      - restore_cache:
-          key: rr-{{ checksum "pom.xml" }}
-
-      - run: mvn package
-
-      - save_cache:
-          paths:
-            - ~/.m2
-          key: rr-{{ checksum "pom.xml" }}
-
-      - store_test_results:
-          path: target/ 
-#------------------------------------------------------------------------------
-site-maven:
-    working_directory: ~/rr
-    docker:
-      - image: maven:3.5.0-jdk-9
-
-    steps:
-      - checkout
-
-      - restore_cache:
-          key: rr-{{ checksum "pom.xml" }}
-
-      - run: mvn site
-
-      - save_cache:
-          paths:
-            - ~/.m2
-          key: rr-{{ checksum "pom.xml" }}
-
-      - store_test_results:
-          path: target/site
-#--------------------------------------------------------------------------------------
-deploy-maven:
-    working_directory: ~/rr
-    docker:
-      - image: maven:3.5.0-jdk-9
-
-    steps:
-      - checkout
-
-      - restore_cache:
-          key: rr-{{ checksum "pom.xml" }}
-
-      - run: mvn surefire:test test
-
-      - save_cache:
-          paths:
-            - ~/.m2
-          key: rr-{{ checksum "pom.xml" }}
-
-      - store_test_results:
-
-          path: target/site
-# work flow
+        unit_test:
+                docker:
+                - image: busybox:latest
+                steps:
+                - run:
+                        name: Unit Test
+                        command: echo "Going to run Unit Test"
+        linting:
+                docker:
+                - image: busybox:latest
+                steps:
+                - run:
+                        name: Lint Test
+                        command: echo "Going to run Lint Test"
+        build_artifact:
+                docker:
+                - image: busybox:latest
+                steps:
+                - run:
+                        name: Build Artifact
+                        command: echo "Going to run the build artifact"
+        deploy_to_dev:
+                docker:
+                - image: busybox:latest
+                steps:
+                - run:
+                        name: Deploy to Dev
+                        command: echo "Going to deploy to dev"
+        deploy_to_qa:
+                docker:
+                - image: busybox:latest
+                steps:
+                - run:
+                        name: Deploy to QA
+                        command: echo "Going to deploy to QA"
+                - run:
+                        name: Step no 2
+                        command: echo "Going to deploy to QA again"
 workflows:
         version: 2
         sample_pipeline:
-     workflow:
-        jobs:
-          - test-maven
-          - build-maven
-          - site-maven
-             requires:
-                - test-maven
-                - build-maven
-          - deploy-maven
-                requires:
-                 - site-maven
+                jobs:
+                        - linting
+                        - unit_test                                
+                        - build_artifact:
+                                requires:
+                                - unit_test
+                                - linting
+                        - deploy_to_dev:
+                                requires:
+                                - build_artifact
+                        - deploy_to_qa:
+                                requires:
+                                - deploy_to_dev
